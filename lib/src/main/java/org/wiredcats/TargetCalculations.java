@@ -14,7 +14,6 @@ public class TargetCalculations {
 
     public Pose2d leftPassingTarget; 
     public Pose2d rightPassingTarget; 
-    public Pose2d middlePassingTarget; 
 
     // should be passed in radians and measured from vertical
     public double passingLaunchAngle; 
@@ -23,13 +22,12 @@ public class TargetCalculations {
     /* CONSTRUCTORS */
     /* targetGoalRegion should be defined in meters for all of these */
     // when you already have a target goal region specific to your alliance and have a defined left, right, and middle passing region
-    public TargetCalculations(Rectangle2d targetGoalRegion, Pose2d target, double targetHeight, Pose2d leftPassingTarget, Pose2d rightPassingTarget, Pose2d middlePassingTarget, double passingLaunchAngle, double targetLaunchAngle) {
+    public TargetCalculations(Rectangle2d targetGoalRegion, Pose2d target, double targetHeight, Pose2d leftPassingTarget, Pose2d rightPassingTarget, double passingLaunchAngle, double targetLaunchAngle) {
         this.targetGoalRegion = targetGoalRegion; 
         this.target = target; 
         this.targetHeight = targetHeight;
         this.leftPassingTarget = leftPassingTarget; 
         this.rightPassingTarget = rightPassingTarget; 
-        this.middlePassingTarget = middlePassingTarget; 
         this.passingLaunchAngle = passingLaunchAngle; 
         this.targetLaunchAngle = targetLaunchAngle; 
     }
@@ -47,7 +45,6 @@ public class TargetCalculations {
 
         this.leftPassingTarget = calculatedLeftPassingTarget; 
         this.rightPassingTarget = calculatedRightPassingTarget; 
-        this.middlePassingTarget = targetGoalRegion.getCenter(); 
     }
 
     // when you already have a target goal region specific to your alliance and only have a single passing target
@@ -60,7 +57,6 @@ public class TargetCalculations {
         // set all to center of targetGoalRegion
         this.leftPassingTarget = passingTarget; 
         this.rightPassingTarget = passingTarget; 
-        this.middlePassingTarget = passingTarget; 
     }
 
     // when you have the targetGoalRegion for blue, but your alliance could be red or blue. 
@@ -78,7 +74,6 @@ public class TargetCalculations {
         Pose2d calculatedRightPassingTarget = new Pose2d(this.targetGoalRegion.getCenter().getX(), this.targetGoalRegion.getCenter().getY() * 1.5, new Rotation2d(0, 0));
         this.leftPassingTarget = calculatedLeftPassingTarget;
         this.rightPassingTarget = calculatedRightPassingTarget;
-        this.middlePassingTarget = this.targetGoalRegion.getCenter();
     }
 
     // field width should be passed in meters
@@ -94,7 +89,6 @@ public class TargetCalculations {
         Pose2d calculatedRightPassingTarget = new Pose2d(this.targetGoalRegion.getCenter().getX(), this.targetGoalRegion.getCenter().getY() * 1.5, new Rotation2d(0, 0));
         this.leftPassingTarget = calculatedLeftPassingTarget;
         this.rightPassingTarget = calculatedRightPassingTarget;
-        this.middlePassingTarget = this.targetGoalRegion.getCenter();
     }
 
     /* INTERNAL HELPER METHODS */
@@ -120,15 +114,12 @@ public class TargetCalculations {
         // calculate distances to each passing target
         double leftDist = robotPose.getTranslation().getDistance(leftPassingTarget.getTranslation());
         double rightDist = robotPose.getTranslation().getDistance(rightPassingTarget.getTranslation());
-        double middleDist = robotPose.getTranslation().getDistance(middlePassingTarget.getTranslation());
 
         // compare distances
-        if (leftDist <= rightDist && leftDist <= middleDist) {
+        if (leftDist <= rightDist) {
             return leftPassingTarget;
-        } else if (rightDist <= leftDist && rightDist <= middleDist) {
-            return rightPassingTarget;
         } else {
-            return middlePassingTarget;
+            return rightPassingTarget;
         }
     }
 
