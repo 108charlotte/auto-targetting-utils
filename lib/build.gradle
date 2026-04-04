@@ -8,11 +8,16 @@
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
+    id 'maven-publish'
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
+    maven {
+        url 'https://frcmaven.wpi.edu/artifactory/release'
+    }
 }
 
 dependencies {
@@ -26,6 +31,12 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation libs.guava
+
+    implementation 'edu.wpi.first.wpiutil:wpiutil-java:2026.2.2'
+    implementation 'edu.wpi.first.wpinet:wpinet-java:2026.2.2'
+    implementation 'edu.wpi.first.wpimath:wpimath-java:2026.2.2'
+    implementation 'edu.wpi.first.wpilibj:wpilibj-java:2026.2.2'
+    implementation 'edu.wpi.first.wpiunits:wpiunits-java:2026.2.2'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -38,4 +49,12 @@ java {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
