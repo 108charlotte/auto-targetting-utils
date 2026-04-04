@@ -8,10 +8,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 
-public class Utils {
+public class ShooterUtils {
     private final TargetCalculations targetCalculations;
 
-    public Utils(TargetCalculations targetCalculations) {
+    public ShooterUtils(TargetCalculations targetCalculations) {
         this.targetCalculations = targetCalculations;
     }
     private Translation3d getRobotVector(Pose2d robotPose, Translation2d fieldVelocity) {
