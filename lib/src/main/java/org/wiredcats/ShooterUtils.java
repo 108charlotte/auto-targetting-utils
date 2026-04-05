@@ -14,7 +14,8 @@ public class ShooterUtils {
     public ShooterUtils(TargetCalculations targetCalculations) {
         this.targetCalculations = targetCalculations;
     }
-    private Translation3d getRobotVector(Pose2d robotPose, Translation2d fieldVelocity) {
+
+    private Translation3d getRobotVector(Pose2d robotPose, Translation3d fieldVelocity) {
         return new Translation3d(fieldVelocity.getX(), fieldVelocity.getY(), 0.0);
     }
 
@@ -24,7 +25,7 @@ public class ShooterUtils {
         return fieldRelative - robotHeadingAngle; 
     }
 
-    private Translation3d getVectorFromRobotToTarget(Pose2d robotPose, Pose2d target, double shooterHeightFromGround) {
+    public Translation3d getVectorFromRobotToTarget(Pose2d robotPose, Pose2d target, double shooterHeightFromGround) {
         Translation3d ballPositionVector = new Translation3d(robotPose.getX(), robotPose.getY(), shooterHeightFromGround);
         Translation3d targetGoalPositionVector = new Translation3d(target.getX(), target.getY(), targetCalculations.getTargetHeight(target));
         Translation3d vectorFromRobotToTarget = targetGoalPositionVector.minus(ballPositionVector);
@@ -40,6 +41,7 @@ public class ShooterUtils {
      * result[1] = calculated initial necessary speed to shoot ball to target accounting for velocity
      * result[2] = calculated horizontal angle necessary to shoot ball to target accounting for velocity
      * result[3] = calculated angle for turret
+     * result[4] = calculated flight time used for scaling speed to calculate compensation
      */
     public double[] calculationsForProjectileLaunch(Pose2d robotPose, Translation2d fieldVelocity, double shooterHeightFromGround) {
         double[] toReturn = new double[4];
@@ -57,6 +59,7 @@ public class ShooterUtils {
             toReturn[1] = 0.0;
             toReturn[2] = 0.0; 
             toReturn[3] = 0.0; 
+            toReturn[4] = 0.0; 
 
             return toReturn;
         }
@@ -78,6 +81,7 @@ public class ShooterUtils {
         toReturn[1] = speed;
         toReturn[2] = getTurretAngleInFieldFrame(shooterSpeedVector);
         toReturn[3] = turretAngle;
+        toReturn[4] = time; 
 
         /* 
          * example of how to call this with ball simulator: 
