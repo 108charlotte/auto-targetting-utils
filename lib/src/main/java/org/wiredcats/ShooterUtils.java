@@ -15,8 +15,12 @@ public class ShooterUtils {
         this.targetCalculations = targetCalculations;
     }
 
-    private Translation3d getRobotVector(Pose2d robotPose, Translation3d fieldVelocity) {
+    private Translation3d getRobotVector(Pose2d robotPose, Translation2d fieldVelocity) {
         return new Translation3d(fieldVelocity.getX(), fieldVelocity.getY(), 0.0);
+    }
+
+    private Translation3d getRobotVector(Pose2d robotPose, Translation3d fieldVelocity) {
+        return fieldVelocity;
     }
 
     private double calculateTurretAngle(Pose2d robotPose, Translation3d shooterSpeedVector) {
@@ -44,7 +48,7 @@ public class ShooterUtils {
      * result[4] = calculated flight time used for scaling speed to calculate compensation
      */
     public double[] calculationsForProjectileLaunch(Pose2d robotPose, Translation2d fieldVelocity, double shooterHeightFromGround) {
-        double[] toReturn = new double[4];
+        double[] toReturn = new double[5];
 
         double pitchAngle = targetCalculations.getAngle(robotPose);
         Pose2d target = targetCalculations.getTarget(robotPose);
